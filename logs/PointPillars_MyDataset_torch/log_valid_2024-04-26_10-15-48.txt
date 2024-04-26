@@ -1,0 +1,2 @@
+Started validation
+validation -  loss_cls: 0.012 loss_bbox: 0.000 loss_dir: 0.000 > loss: 0.012

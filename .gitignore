@@ -3,3 +3,5 @@ Dockerfile_CPU
 Dockerfile_GPU
 Exercises
 .devcontainer
+.vscode
+*.pth

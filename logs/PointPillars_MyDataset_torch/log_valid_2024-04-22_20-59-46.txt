@@ -1,0 +1,16 @@
+Started validation
+validation -  loss_cls: 0.012 loss_bbox: 0.000 loss_dir: 0.000 > loss: 0.012
+
+=============== mAP BEV ===============
+class \ difficulty      0     1     2 
+VEHICLE:              0.00  0.00  0.00 
+PEDESTRIAN:           0.00  0.00  0.00 
+CYCLIST:              0.00  0.00  0.00 
+Overall: 0.00
+
+=============== mAP  3D ===============
+class \ difficulty      0     1     2 
+VEHICLE:              0.00  0.00  0.00 
+PEDESTRIAN:           0.00  0.00  0.00 
+CYCLIST:              0.00  0.00  0.00 
+Overall: 0.00

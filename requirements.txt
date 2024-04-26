@@ -9,3 +9,7 @@ easydict
 opencv-python
 notebook
 nbdime
+torch
+torchvision 
+torchaudio
+tensorboard
