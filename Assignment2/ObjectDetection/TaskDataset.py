@@ -18,7 +18,7 @@ Dataset which load files of the Task Dataset and returns always all the files.
 """
 
 class TaskDataset(BaseDataset):
-    def __init__(self, cfg, name="MyDataset", dataset_path="Dataset/data_2"):
+    def __init__(self, cfg, name="MyDataset", dataset_path="../Dataset/data_2"):
         super().__init__(name=name, dataset_path=dataset_path)
         self.data_path = dataset_path
         self.files =  [f for f in glob(dataset_path + "/*.pb")]
@@ -80,8 +80,8 @@ class TaskDataset(BaseDataset):
         labels = []
         mapping = dataset.get_label_to_names()
         for detection in detections:
-            label = BEVBox3D(center=detection.pos, 
-                             size=detection.scale, 
+            label = BevBox3DTask(center=detection.pos, 
+                             size=[detection.scale[i] for i in [1, 2, 0]],   #l, w, h -> w, h, l
                              yaw=-detection.rot[-1], 
                              label_class=mapping[detection.type],
                              confidence=1.)
@@ -127,3 +127,17 @@ class Track:
         self.state = "initialized"
         self.id = detection.id
         self.label_class = detection.id
+
+
+class BevBox3DTask(BEVBox3D):
+    def __init__(self, center, size, yaw, label_class, confidence):
+        super().__init__(center, size, yaw, label_class, confidence)
+    
+    def to_dict(self):
+        """Convert data for evaluation:"""
+        return {
+            'bbox': self.to_xyzwhlr()[0, 1, 2, 5, 4, 3, 6],  # lwh -> 
+            'label': self.label_class,
+            'score': self.confidence,
+            'difficulty': self.level
+        }

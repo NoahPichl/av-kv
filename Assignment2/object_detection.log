@@ -1,1 +1,7 @@
-WARNING:Comm:No such comm: 242252ce6fd84b03bfa9d84b5a79b1b5
+WARNING:Comm:No such comm: d164d85dea754d58a08d5562ad683c15
+WARNING:Comm:No such comm: d164d85dea754d58a08d5562ad683c15
+WARNING:Comm:No such comm: 0a81ac0acde54544a0bf5f7359af53c2
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Loading checkpoint ./logs/pointpillars_waymo_202211200158utc_seed2_gpu16.pth
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:DEVICE : cuda
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Logging in file : ./logs/PointPillars_MyDataset_torch/log_valid_2024-04-30_14-35-05.txt
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Started validation

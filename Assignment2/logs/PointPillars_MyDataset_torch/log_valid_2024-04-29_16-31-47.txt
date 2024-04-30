@@ -1,0 +1,19 @@
+Started validation
+validation -  loss_cls: 1.709 loss_bbox: 1.074 loss_dir: 0.331 > loss: 3.115
+
+=============== mAP BEV ===============
+class \ difficulty      0     1     2 
+VEHICLE:              0.00  0.00  0.00 
+PEDESTRIAN:           0.00  0.00  0.00 
+CYCLIST:              0.00  0.00  0.00 
+Overall: 0.00
+
+=============== mAP  3D ===============
+class \ difficulty      0     1     2 
+VEHICLE:              0.00  0.00  0.00 
+PEDESTRIAN:           0.00  0.00  0.00 
+CYCLIST:              0.00  0.00  0.00 
+Overall: 0.00
+DEVICE : cuda
+Logging in file : ./logs/PointPillars_MyDataset_torch/log_valid_2024-04-29_16-39-19.txt
+Started validation
