@@ -128,16 +128,22 @@ class Track:
         self.id = detection.id
         self.label_class = detection.id
 
-
+# class to overwrite BevBox3D to reorder the size of the box
 class BevBox3DTask(BEVBox3D):
     def __init__(self, center, size, yaw, label_class, confidence):
         super().__init__(center, size, yaw, label_class, confidence)
     
-    def to_dict(self):
-        """Convert data for evaluation:"""
-        return {
-            'bbox': self.to_xyzwhlr()[0, 1, 2, 5, 4, 3, 6],  # lwh -> 
-            'label': self.label_class,
-            'score': self.confidence,
-            'difficulty': self.level
-        }
+    def to_xyzwhlr(self):
+        """Returns box in the common 7-sized vector representation: (x, y, z, w,
+        l, h, a), where (x, y, z) is the bottom center of the box, (w, l, h) is
+        the width, length and height of the box a is the yaw angle.
+
+        Returns:
+            box(7,)
+
+        """
+        bbox = np.zeros((7,))
+        bbox[0:3] = self.center - [0, 0, self.size[1] / 2]
+        bbox[3:6] = np.array(self.size)[[2, 1, 0]]  # reorder size
+        bbox[6] = self.yaw
+        return bbox

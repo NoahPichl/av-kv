@@ -10,6 +10,4 @@ opencv-python
 notebook
 nbdime
 torch==2.0.1
-torchvision 
-torchaudio
 tensorboard
