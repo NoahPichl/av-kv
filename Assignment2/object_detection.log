@@ -253,3 +253,5 @@ INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:   
 INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
 INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
 INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.63
+WARNING:Comm:No such comm: a3b680f11ee3480d87e388d6d1143d07
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Loading checkpoint ./logs/pointpillars_waymo_202211200158utc_seed2_gpu16.pth
