@@ -255,3 +255,78 @@ INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:   
 INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.63
 WARNING:Comm:No such comm: a3b680f11ee3480d87e388d6d1143d07
 INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Loading checkpoint ./logs/pointpillars_waymo_202211200158utc_seed2_gpu16.pth
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:DEVICE : cuda
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Logging in file : ./logs/PointPillars_MyDataset_torch/log_valid_2024-05-02_12-45-19.txt
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Started validation
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:validation -  loss_cls: 1.223 loss_bbox: 5.661 loss_dir: 0.444 > loss: 7.328
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP BEV ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.41 28.41 28.41 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.47
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP  3D ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.88 28.88 28.88 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.63
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Loading checkpoint ./logs/pointpillars_waymo_202211200158utc_seed2_gpu16.pth
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:DEVICE : cuda
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Logging in file : ./logs/PointPillars_MyDataset_torch/log_valid_2024-05-02_12-58-32.txt
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Started validation
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:validation -  loss_cls: 1.223 loss_bbox: 5.661 loss_dir: 0.444 > loss: 7.328
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP BEV ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.41 28.41 28.41 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.47
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP  3D ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.88 28.88 28.88 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.63
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:DEVICE : cuda
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Logging in file : ./logs/PointPillars_MyDataset_torch/log_valid_2024-05-02_12-59-09.txt
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Started validation
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:validation -  loss_cls: 1.223 loss_bbox: 5.661 loss_dir: 0.444 > loss: 7.328
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP BEV ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.41 28.41 28.41 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.47
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP  3D ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.88 28.88 28.88 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.63
+WARNING:Comm:No such comm: 883e53b2cf16480f89e5f02dd5662e03
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Loading checkpoint ./logs/pointpillars_waymo_202211200158utc_seed2_gpu16.pth
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:DEVICE : cuda
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Logging in file : ./logs/PointPillars_MyDataset_torch/log_valid_2024-05-02_13-22-42.txt
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Started validation
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:validation -  loss_cls: 1.223 loss_bbox: 5.661 loss_dir: 0.444 > loss: 7.328
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP BEV ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.41 28.41 28.41 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.47
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:=============== mAP  3D ===============
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:class \ difficulty      0     1     2 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:VEHICLE:             28.88 28.88 28.88 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:PEDESTRIAN:           0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:CYCLIST:              0.00  0.00  0.00 
+INFO:ObjectDetection.Open3D_ML.ml3d.torch.pipelines.object_detection:Overall: 9.63
