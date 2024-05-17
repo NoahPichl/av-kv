@@ -4,3 +4,5 @@ Dockerfile_GPU
 .devcontainer
 .vscode
 *.pth
+docs
+*.pyc
