@@ -7,6 +7,7 @@ from pypcd4 import PointCloud
 from scipy.stats import multivariate_normal
 from typing import List, Tuple
 from IPython.display import HTML
+from typing import Optional
 
 
 def pcd_from_path(file_path: str) -> np.ndarray:
@@ -132,8 +133,8 @@ def animate_icp_results(P: np.ndarray,
                         rotation_matrices: List[np.ndarray],
                         translations: List[np.ndarray],
                         correspondences: List[Tuple],
-                        x_limits: List[float] | None = None,
-                        y_limits: List[float] | None = None):
+                        x_limits: Optional[List[float]] = None,
+                        y_limits: Optional[List[float]] = None):
     """
     Animate the iterative closest point (ICP) results showing the alignment of two point sets.
 
