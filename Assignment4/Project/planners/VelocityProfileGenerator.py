@@ -95,10 +95,10 @@ class VelocityProfileGenerator(object):
             trajectory[0] = TrajectoryPoint(p,v,0,0)
         
         return trajectory
-
-    def decelerate_trajectory(self, spiral : List[PathPoint], start_speed : float):
+    
+    def decelerate_trajectory(self, spiral: List[PathPoint], start_speed: float):
         """
-            Computes a velocity trajectory for deceleration to a full stop.
+        Computes a velocity trajectory for deceleration to a full stop.
         """
         trajectory = []
 
@@ -110,10 +110,10 @@ class VelocityProfileGenerator(object):
         stop_index = len(spiral) - 1
 
         for i in range(stop_index):
-            path_length += path_point_distance(spiral[i], spiral[i+1])
-        
+            path_length += path_point_distance(spiral[i], spiral[i + 1])
+
         # If the brake distance exceeds the length of the path, then we cannot
-        # perform a smooth deceleration and require a harder deceleration.  Build the path
+        # perform a smooth deceleration and require a harder deceleration. Build the path
         # up in reverse to ensure we reach zero speed at the required time.
 
         if brake_distance + decel_distance > path_length:
@@ -138,57 +138,45 @@ class VelocityProfileGenerator(object):
             time_step = 0
             time = 0
 
-            for i in range(len(speeds)-1):
+            for i in range(len(speeds) - 1):
                 path_point = spiral[i]
                 v = speeds[i]
                 relative_time = time
                 traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
                 trajectory.append(traj_point)
-                
+
                 time_step = np.abs(speeds[i] - speeds[i + 1]) / self._a_max
                 time += time_step
-            
+
             # We still need to add the last one
-            i = len(spiral)-1
+            i = len(spiral) - 1
             path_point = spiral[i]
             v = speeds[i]
             relative_time = time
             traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
             trajectory.append(traj_point)
-        
+
         # If the brake distance DOES NOT exceed the length of the path
         else:
             brake_index = stop_index
             temp_dist = 0
 
             # Compute the index at which to start braking down to zero.
-            # TODO-calc brake index: To calculate the brake index, you can
-            # go iteratively through the spiral and check in which index,
-            # the distance is bigger than the brake distance. The brake index
-            # will be the first index where the above condition is met.
-            # Hint, you can use the function path_point_distance to 
-            # check calculate the distance between two points in the spiral
-            # eg. temp_dist += path_point_distance(spiral[i], spiral[i-1])
-            
-            for i in range(stop_index,0,-1):
-                stop_index = i # change this loop to work properly
-                
+            for i in range(stop_index, 0, -1):
+                temp_dist += path_point_distance(spiral[i], spiral[i - 1])
+                if temp_dist >= brake_distance:
+                    brake_index = i
+                    break
+
             # Compute the index to stop decelerating to the slow speed.
             decel_index = 0
             temp_dist = 0.0
 
-            # Compute the index at which to start braking down to zero.
-            # TODO-calc deceleration index: To calculate the deceleration index, you can
-            # go iteratively through the spiral and check in which index,
-            # the distance is bigger than the decel_distance. The deceleration index
-            # will be the first index where the above condition is met.
-            # Hint, you can use the function path_point_distance to 
-            # check calculate the distance between two points in the spiral
-            # eg. temp_dist += path_point_distance(spiral[i], spiral[i+1])
-
             for i in range(brake_index):
-                decel_index = i # change this loop to work properly
-
+                temp_dist += path_point_distance(spiral[i], spiral[i + 1])
+                if temp_dist >= decel_distance:
+                    decel_index = i
+                    break
 
             # At this point we have all the speeds. Now we need to create the
             # trajectory
@@ -197,30 +185,18 @@ class VelocityProfileGenerator(object):
             vi = start_speed
 
             # Calculation of the deceleration trajectory
-
             for i in range(decel_index):
-                # TODO calculate the distance between points in the spiral
-                # Use path_point_distance() function
-                dist = 0
-
-                # TODO calculate the final velocity at the calculated distance,
-                # taking into account a decceleration of -self._a_max, and an
-                # initial velocity vi.
-                # Hint: use the self.calc_final_speed() that you completed. 
-                vf = 0
-
-                # Cap the final velocity
+                dist = path_point_distance(spiral[i], spiral[i + 1])
+                vf = self.calc_final_speed(vi, -self._a_max, dist)
                 vf = max(vf, self._slow_speed)
-                
-                # Creating point
+
                 path_point = spiral[i]
                 v = vi
                 relative_time = time
                 traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
                 trajectory.append(traj_point)
 
-                # Updating variables 
-                time_step = np.abs(vf-vi) / self._a_max
+                time_step = np.abs(vf - vi) / self._a_max
                 time += time_step
                 vi = vf
 
@@ -232,24 +208,17 @@ class VelocityProfileGenerator(object):
                 traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
                 trajectory.append(traj_point)
 
-                dist = path_point_distance(spiral[i], spiral[i+1])
-                if (dist>0):
-                    time_step = dist/vi
+                dist = path_point_distance(spiral[i], spiral[i + 1])
+                if dist > 0:
+                    time_step = dist / vi
                 else:
                     time_step = 0
                 time += time_step
 
             # Calculation of deceleration trajectory until stopped
             for i in range(brake_index, stop_index):
-                # TODO calculate the distance between points in the spiral
-                # Use path_point_distance() function
-                dist = 0
-
-                # TODO calculate the final velocity at the calculated distance,
-                # taking into account a decceleration of -self._a_max, and an
-                # initial velocity vi.
-                # Hint: use the self.calc_final_speed() that you completed. 
-                vf = 0
+                dist = path_point_distance(spiral[i], spiral[i + 1])
+                vf = self.calc_final_speed(vi, -self._a_max, dist)
 
                 path_point = spiral[i]
                 v = vi
@@ -268,23 +237,63 @@ class VelocityProfileGenerator(object):
             relative_time = time
             traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
             trajectory.append(traj_point)
-        
+
         return trajectory
 
-    def follow_trajectory(self, spiral : List[PathPoint], start_speed : float,
-                          desired_speed : float, lead_car_state : State ):
+
+    def follow_trajectory(self, spiral: List[PathPoint], start_speed: float, desired_speed: float, lead_car_state: State):
         """
-         Computes a velocity trajectory for following a lead vehicle
-         Still on development
+        Computes a velocity trajectory for following a lead vehicle.
         """
         trajectory = []
-        return trajectory     
+
+        # Calculate time to collision (TTC)
+        rel_speed = start_speed - lead_car_state.speed
+        if rel_speed <= 0:
+            ttc = np.inf
+        else:
+            ttc = path_point_distance(spiral[0], lead_car_state.position) / rel_speed
+
+        # Safe distance to maintain from the lead vehicle
+        safe_distance = self._time_gap * start_speed
+
+        time_step = 0
+        time = 0
+        vi = start_speed
+
+        for i in range(len(spiral) - 1):
+            dist = path_point_distance(spiral[i], spiral[i + 1])
+
+            if dist >= safe_distance:
+                vf = self.calc_final_speed(vi, self._a_max, dist)
+                vf = min(desired_speed, vf)
+            else:
+                vf = lead_car_state.speed
+
+            path_point = spiral[i]
+            v = vi
+            relative_time = time
+            traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
+            trajectory.append(traj_point)
+
+            time_step = np.abs(vf - vi) / self._a_max
+            time += time_step
+            vi = vf
+
+        i = len(spiral) - 1
+        path_point = spiral[i]
+        v = vi
+        relative_time = time
+        traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
+        trajectory.append(traj_point)
+
+        return trajectory
+ 
     
-    def nominal_trajectory(self, spiral : List[PathPoint], start_speed : float,
-                          desired_speed : float):
+    def nominal_trajectory(self, spiral: List[PathPoint], start_speed: float, desired_speed: float):
         """
-         Computes a velocity trajectory for nominal speed tracking, a.k.a. Lane Follow
-         or Cruise Control
+        Computes a velocity trajectory for nominal speed tracking, a.k.a. Lane Follow
+        or Cruise Control
         """
         trajectory = []
         accel_distance = 0
@@ -298,76 +307,52 @@ class VelocityProfileGenerator(object):
         distance = 0
 
         # Compute the index at which to start braking down to zero.
-        # TODO-calc ramp end index: To calculate the ramp end index, you can
-        # go iteratively through the spiral and check in which index,
-        # the distance is bigger than the accel_distance. The ramp end index
-        # will be the first index where the above condition is met.
-        # Hint, you can use the function path_point_distance to 
-        # check calculate the distance between two points in the spiral
-        # eg. distance += path_point_distance(spiral[i], spiral[i+1])
+        for i in range(len(spiral) - 1):
+            distance += path_point_distance(spiral[i], spiral[i + 1])
+            if distance >= accel_distance:
+                ramp_end_index = i
+                break
 
-        for i in range(len(spiral)-1):
-            ramp_end_index = i # change this loop to work properly
-        
         time_step = 0
         time = 0
         vi = start_speed
 
         for i in range(ramp_end_index):
-            # TODO calculate the distance between points in the spiral
-            # Use path_point_distance() function
-            dist = 0 # Calculate this
-            vf = 0
-
+            dist = path_point_distance(spiral[i], spiral[i + 1])
             if desired_speed < start_speed:
-                # TODO calculate the final velocity at the calculated distance,
-                # taking into account a decceleration/deccelarion of -self._a_max/self._a_max, and an
-                # initial velocity vi.
-                # Hint: use the self.calc_final_speed() that you completed, also check which one should you
-                # use, self._a_max or -self._a_max. 
-                vf = 0
+                vf = self.calc_final_speed(vi, -self._a_max, dist)
                 vf = max(desired_speed, vf)
-            
             else:
-                # TODO calculate the final velocity at the calculated distance,
-                # taking into account a decceleration/deccelarion of -self._a_max/self._a_max, and an
-                # initial velocity vi.
-                # Hint: use the self.calc_final_speed() that you completed, also check which one should you
-                # use, self._a_max or -self._a_max. 
-                vf = 0
+                vf = self.calc_final_speed(vi, self._a_max, dist)
                 vf = min(desired_speed, vf)
-            
+
             path_point = spiral[i]
             v = vi
             relative_time = time
             traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
             trajectory.append(traj_point)
 
-            time_step = np.abs(vf-vi)/self._a_max
+            time_step = np.abs(vf - vi) / self._a_max
             time += time_step
-            vi = vf 
-        
-        for i in range(ramp_end_index,len(spiral)-1):
+            vi = vf
+
+        for i in range(ramp_end_index, len(spiral) - 1):
             path_point = spiral[i]
             v = desired_speed
             relative_time = time
             traj_point = TrajectoryPoint(path_point, v, 0, relative_time)
             trajectory.append(traj_point)
 
-            # TODO calculate the distance between points in the spiral
-            # Use path_point_distance() function
-            dist = 0
+            dist = path_point_distance(spiral[i], spiral[i + 1])
 
-            # This should never happen in a "nominal_trajectory", but it's a sanity
-            # check
             if desired_speed < dbl_epsilon:
                 time_step = 0
             else:
                 time_step = dist / desired_speed
-            
+
             time += time_step
-        
-        i = len(spiral)-1
+
+        i = len(spiral) - 1
         path_point = spiral[i]
         v = desired_speed
         relative_time = time
@@ -375,26 +360,18 @@ class VelocityProfileGenerator(object):
         trajectory.append(traj_point)
 
         return trajectory
+
     
-    def calc_distance(self, v_i : float, v_f : float, a : float):
+    def calc_distance(self, v_i: float, v_f: float, a: float):
         """
         Using d = (v_f^2 - v_i^2) / (2 * a), compute the distance
         required for a given acceleration/deceleration.
         """
-
-        d = 0
         if abs(a) < dbl_epsilon:
-            d = np.inf
+            return np.inf
         else:
-            # TODO-calc distance: use one of the common rectilinear accelerated
-            # equations of motion to calculate the distance traveled while going from
-            # v_i (initial velocity) to v_f (final velocity) at a constant
-            # acceleration/deceleration "a". HINT look at the description of this
-            # function. Make sure you handle div by 0
-            
-            d = 0 # calculate this
-        
-        return d
+            d = (v_f ** 2 - v_i ** 2) / (2 * a)
+            return d
     
     def calc_final_speed(self, v_i : float, a : float, d : float):
         """
@@ -404,21 +381,11 @@ class VelocityProfileGenerator(object):
         return zero as the final speed.
         """
 
-        v_f = 0
-        #TODO-calc final speed: Calculate the final distance. HINT: look at the
-        #description of this function. Make sure you handle negative discriminant
-        #and make v_f = 0 in that case. If the discriminant is inf or nan return
-        #infinity
-
-        v_f_squared = 0 # Calculate this
+        v_f_squared = v_i ** 2 + 2 * a * d
 
         if v_f_squared <= 0:
-            v_f = 0
-
-        elif(np.isinf(v_f_squared) or np.isnan(v_f_squared)):
-            v_f = np.inf
-        
+            return 0
+        elif np.isinf(v_f_squared) or np.isnan(v_f_squared):
+            return np.inf
         else:
-            v_f = np.sqrt(v_f_squared)
-            
-        return v_f
+            return np.sqrt(v_f_squared)
