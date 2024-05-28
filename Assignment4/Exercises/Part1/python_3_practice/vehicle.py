@@ -1,4 +1,5 @@
 from cost_functions import calculate_cost
+import numpy as np
 
 lane_direction = {"PLCL": 1, "LCL": 1, "LCR": -1, "PLCR": -1}
 
@@ -45,11 +46,17 @@ class Vehicle(object):
             Included from cost.cpp, computes the cost for a trajectory.
         """
 
-        #Your code here
+        successor = self.successor_states()
+        min_cost = np.inf
+        best_trajectory = None
+        for i, state in enumerate(successor):
+            trajectory = self.generate_trajectory(state, predictions)
+            cost = calculate_cost(self, trajectory, predictions)
+            if cost < min_cost:
+                min_cost = cost
+                best_trajectory = trajectory
 
-        #Change return value here
-        return [Vehicle(self.lane, self.s, self.v, self.a, self.state), 
-                      Vehicle(self.lane, self.position_at(1), self.v, 0, self.state)]
+        return best_trajectory
 
 
     def successor_states(self):

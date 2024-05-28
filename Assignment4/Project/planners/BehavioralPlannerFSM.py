@@ -105,10 +105,33 @@ class BehavioralPlannerFSM(object):
         velocity_mag = ego_state.velocity.length()
         accel_mag = ego_state.acceleration.length()
         t = self._lookahead_time 
-        # TODO-Lookahead: One way to find a reasonable lookahead distance is to find
+        # Lookahead: One way to find a reasonable lookahead distance is to find
         # the distance you will need to come to a stop while traveling at speed V and
         # using a comfortable deceleration.
-        look_ahead_distance = -1 #<- calculate value
+        comfortable_deceleration = 3.0 
+
+        # Reaction distance--> is the distance that auto moves during reaction to the obstacles
+        reaction_distance = velocity_mag * t # d_1 = v_i * t -> d_1 = initial velocity * reaction time
+
+        # Time required to stop
+        if comfortable_deceleration != 0:
+          
+          stop_time = -velocity_mag / comfortable_deceleration # t_d = - v_i / a, a<0,
+        else:
+
+            stop_time = 0  # Avoid division by zero
+        
+        # Deceleration distance--> is when brakes are applied
+        deceleration_distance = velocity_mag * stop_time + 0.5 * comfortable_deceleration * stop_time ** 2 # d = v_i * t_d + 0.5 * a * t_d^2
+
+        # Total lookahead distance
+        look_ahead_distance = reaction_distance + deceleration_distance
+
+        # look_ahead_distance = -1 #<- calculate value
+
+        # Cap look_ahead_distance in range [_lookahead_distance_min, _lookahead_distance_max] 
+        look_ahead_distance = min(max(look_ahead_distance,self._lookahead_distance_min),self._lookahead_distance_max)
+        
 
         # Cap look_ahead_distance in range [_lookahead_distance_min, _lookahead_distance_max] 
         look_ahead_distance = min(max(look_ahead_distance,self._lookahead_distance_min),self._lookahead_distance_max)
@@ -129,72 +152,72 @@ class BehavioralPlannerFSM(object):
 
                 # Let's backup a "buffer" distance behind the "STOP" point
 
-                # TODO-goal behind the stopping point: put the goal behind the stopping
+                # DO-goal behind the stopping point: put the goal behind the stopping
                 # point (i.e the actual goal location) by "_stop_line_buffer". HINTS:
                 # remember that we need to go back in the opposite direction of the
                 # goal/road, i.e you should use: ang = goal.rotation.yaw + M_PI and then
                 # use cosine and sine to get x and y
                 #
                 ang = goal.rotation.yaw + np.pi
-                goal.location.x += 1.0 #<- calculate appropiate coordinate
-                goal.location.y += 1.0 #<- calculate appropiate coordinate
+                goal.location.x += np.cos(ang) * self._stop_line_buffer 
+                goal.location.y += np.sin(ang) * self._stop_line_buffer 
 
 
-                # TODO-goal speed at stopping point: What should be the goal speed??
-                goal.velocity.x = 1.0  # <- caluclate value
-                goal.velocity.y = 1.0  # <- caluclate value
-                goal.velocity.z = 1.0  # <- caluclate value
+                # DO-goal speed at stopping point: What should be the goal speed??
+                goal.velocity.x = 0
+                goal.velocity.y = 0
+                goal.velocity.z = 0
 
             else:
-                # TODO-goal speed in nominal state: What should be the goal speed now
+                # DO-goal speed in nominal state: What should be the goal speed now
                 # that we know we are in nominal state and we can continue freely?
                 # Remember that the speed is a vector
                 # HINT: self._speed_limit * np.sin/cos (goal.rotation.yaw);
-                goal.velocity.x = 1.0  # <- caluclate value
-                goal.velocity.y = 1.0  # <- caluclate value
-                goal.velocity.z = 1.0 # <-  caluclate value
+                goal.velocity.x = self._speed_limit * np.cos(goal.rotation.yaw)
+                goal.velocity.y = self._speed_limit * np.sin(goal.rotation.yaw)
+                goal.velocity.z = 0
 
         elif (self._active_maneuver == Maneuver.DECEL_TO_STOP):
-            # TODO-maintain the same goal when in DECEL_TO_STOP state: Make sure the
+            # DO-maintain the same goal when in DECEL_TO_STOP state: Make sure the
             # new goal is the same as the previous goal (self._goal). That way we
             # keep/maintain the goal at the stop line.
-            goal = None # <- change value
+            goal = self._goal
 
-            # TODO: It turns out that when we teleport, the car is always at speed
+            # DO: It turns out that when we teleport, the car is always at speed
             # zero. In this the case, as soon as we enter the DECEL_TO_STOP state,
-            # the condition that we are <= seld._stop_threshold_speed is ALWAYS true and we
+            # the condition that we are <= self._stop_threshold_speed is ALWAYS true and we
             # move straight to "STOPPED" state. To solve this issue (since we don't
             # have a motion controller yet), you should use "distance" instead of
             # speed. Make sure the distance to the stopping point is <=
             # params.P_STOP_THRESHOLD_DISTANCE. Uncomment the line used to calculate the
             # distance
             
-            #distance_to_stop_sign = goal.location.distance(ego_state.location)
+            distance_to_stop_sign = goal.location.distance(ego_state.location)
 
-            # TODO-use distance rather than speed: Use distance rather than speed...
-            if utils.get_magnitude(ego_state.velocity) < self._stop_threshold_speed:
+            # DO-use distance rather than speed: Use distance rather than speed...
+            if distance_to_stop_sign < params.P_STOP_THRESHOLD_DISTANCE:
                 # if (distance_to_stop_sign <= params.P_STOP_THRESHOLD_DISTANCE):
-                # TODO-move to STOPPED state: Now that we know we are close or at the
+                # DO-move to STOPPED state: Now that we know we are close or at the
                 # stopping point we should change state to "STOPPED"
 
-                self._active_maneuver = None # <- change this  
+                self._active_maneuver = Maneuver.STOPPED
 
                 self._start_stop_time = time.time()
         
         elif (self._active_maneuver == Maneuver.STOPPED):
-            # TODO-maintain the same goal when in STOPPED state: Make sure the new goal
+            # DO-maintain the same goal when in STOPPED state: Make sure the new goal
             # is the same as the previous goal. That way we keep/maintain the goal at
             # the stop line. goal = ...;
 
-            goal = None  # Keep previous goal. Stay where you are. # <- Fix This
+            goal = self._goal
 
             stopped_secs = (time.time() - self._start_stop_time)
 
             if (stopped_secs >= self._req_stop_time and tl_state!="Red"):
-                # TODO-move to FOLLOW_LANE state: What state do we want to move to, when
+                # DO-move to FOLLOW_LANE state: What state do we want to move to, when
                 # we are "done" at the STOPPED state?
                 
-                self._active_maneuver = None # <- Change this
+                self._active_maneuver = Maneuver.FOLLOW_LANE # <- Change this
 
         self._goal = goal
         return goal
