@@ -165,7 +165,7 @@ class VelocityProfileGenerator(object):
             for i in range(stop_index, 0, -1):
                 temp_dist += path_point_distance(spiral[i], spiral[i - 1])
                 if temp_dist >= brake_distance:
-                    brake_index = i
+                    brake_index = i-1  # added bias for the range function
                     break
 
             # Compute the index to stop decelerating to the slow speed.
@@ -175,7 +175,7 @@ class VelocityProfileGenerator(object):
             for i in range(brake_index):
                 temp_dist += path_point_distance(spiral[i], spiral[i + 1])
                 if temp_dist >= decel_distance:
-                    decel_index = i
+                    decel_index = i  # does not need bias since already have it in brake_index
                     break
 
             # At this point we have all the speeds. Now we need to create the
@@ -260,15 +260,12 @@ class VelocityProfileGenerator(object):
         time_step = 0
         time = 0
         vi = start_speed
+        target_speed = min(lead_car_state.speed, desired_speed)
 
         for i in range(len(spiral) - 1):
             dist = path_point_distance(spiral[i], spiral[i + 1])
-
-            if dist >= safe_distance:
-                vf = self.calc_final_speed(vi, self._a_max, dist)
-                vf = min(desired_speed, vf)
-            else:
-                vf = lead_car_state.speed
+            vf = self.calc_final_speed(vi, self._a_max, dist)
+            vf = min(target_speed, vf)
 
             path_point = spiral[i]
             v = vi
@@ -310,7 +307,7 @@ class VelocityProfileGenerator(object):
         for i in range(len(spiral) - 1):
             distance += path_point_distance(spiral[i], spiral[i + 1])
             if distance >= accel_distance:
-                ramp_end_index = i
+                ramp_end_index = i+1
                 break
 
         time_step = 0

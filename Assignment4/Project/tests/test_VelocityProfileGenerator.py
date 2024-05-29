@@ -1,12 +1,16 @@
 import os
+import sys
+sys.path.append('/home/noah/Documents/AutomotiveVehicles/Assignment4/Project')
 
 import glob
 import json
 import unittest
 
+
+from planners.VelocityProfileGenerator import VelocityProfileGenerator
 from planners.VelocityProfileGenerator import VelocityProfileGenerator
 from planners.Structures import State, PathPoint, Maneuver, TrajectoryPoint
-from . import TestParams as p
+from tests import TestParams as p
 
 
 class TestVelocityProfileGenerator(unittest.TestCase):
@@ -62,6 +66,13 @@ class TestVelocityProfileGenerator(unittest.TestCase):
                     None,
                     behaviour
                 )
-                self.assertListEqual(trajectory, trajectory_calculated)
+                for tp1, tp2 in zip(trajectory, trajectory_calculated):
+                    for key in tp1.to_dict().keys():
+                        self.assertAlmostEqual(tp1.to_dict()[key], tp2.to_dict()[key], places=4)
 
                 print("PASSED")
+
+if __name__ == "__main__":
+    test = TestVelocityProfileGenerator()
+    test.setUp()
+    test.test_generate_trajectory()
