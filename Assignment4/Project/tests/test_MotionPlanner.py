@@ -1,9 +1,10 @@
 import os
+import sys
+sys.path.append('/home/noah/Documents/AutomotiveVehicles/Assignment4/Project')
 
 import glob
 import json
 import unittest
-
 
 from planners.MotionPlanner import MotionPlanner
 from planners.Structures import State

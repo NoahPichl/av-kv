@@ -111,22 +111,22 @@ class MotionPlanner(object):
         # main goal. To get a perpendicular angle, just add 90 (or PI/2) to the main
         # goal heading.
 
-        # TODO-Perpendicular direction: ADD pi/2 to the goal yaw
+        # Perpendicular direction: ADD pi/2 to the goal yaw
         # (goal_state.rotation.yaw)
-        yaw = 0 # Calclate this 
+        yaw = goal_state.rotation.yaw + np.pi/2
 
         for i in range(self._num_paths):
             goal_offset = goal_state.copy()
             offset = (i - (int)(self._num_paths / 2)) * self._goal_offset
             
-            # TODO-offset goal location: calculate the x and y position of the offset
+            # offset goal location: calculate the x and y position of the offset
             # goals using "offset" (calculated above) and knowing that the goals should
             # lie on a perpendicular line to the direction (yaw) of the main goal. You
             # calculated this direction above (yaw_plus_90). HINT: use
             # np.cos(yaw_plus_90) and np.sin(yaw_plus_90)
 
-            goal_offset.location.x += 0 # calculates this
-            goal_offset.location.y += 0 # calculates this
+            goal_offset.location.x += offset * np.cos(yaw)
+            goal_offset.location.y += offset * np.sin(yaw)
             
             if self.valid_goal(goal_state, goal_offset):
                 goals_offset.append(goal_offset)
