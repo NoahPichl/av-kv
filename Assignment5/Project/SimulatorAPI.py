@@ -875,14 +875,20 @@ def game_loop(args):
         ###############################
         
         # TODO Create throttle PID constants.
+        kp_throttle = 0.45
+        ki_throttle = 0.0
+        kd_throttle = 0.0
 
         # TODO Initialize controller class
-        throttle_controller = None
+        throttle_controller = PIDController(kp_throttle, ki_throttle, kd_throttle, -1.0, 1.0)
         
         # TODO Create steering PID constants.
+        kp_steer = 0.3
+        ki_steer = 0.0
+        kd_steer = 0.0
 
         # TODO Initialize controller class.
-        steer_controller = None
+        steer_controller = PIDController(kp_steer, ki_steer, kd_steer, -1.2, 1.2)
         
         i_data = None
         s_data = None
@@ -1049,12 +1055,13 @@ def get_control(steer_controller : PIDController, throttle_controller : PIDContr
     # you can access the desired trajectory wih xt_points and yt_points. 
     # you can also use the function angle_between_points(x1,y1,x2,y2) to 
     # calculate the angle between two points.
-    desired_heading = 0
-    steer_error = 0
+    upper_index = int(np.clip(np.ceil(current_time), 1, len(xt_points)-1))
+    desired_heading = angle_between_points(xt_points[upper_index-1], yt_points[upper_index-1], xt_points[upper_index], yt_points[upper_index])
+    steer_error = desired_heading - yaw
 
     # TODO obtain the steer command from the controller. Use the get_control_command() method
     # from the appropiate controller.
-    steer_command = 0
+    steer_command = steer_controller.get_control_command(steer_error, dt)
 
     #####################################
     ###### Throttle Control #############
@@ -1062,12 +1069,15 @@ def get_control(steer_controller : PIDController, throttle_controller : PIDContr
     
     # TODO calculate the throttle error from the position and the desired speed.
     # you can get the desired speed from the vt_points array.
-    desired_v = 0
-    throttle_error  = 0
+    desired_v = (vt_points[upper_index] + vt_points[upper_index-1]) / 2 #interpolate ?
+    print("Distance Error: " + str(xt_points[upper_index] - x_position))
+    throttle_error  = desired_v - velocity
 
     # TODO obtain the throtle command from the controller. Use the get_control_command() method
     # from the appropiate controller.
-    throttle = 0
+    throttle = throttle_controller.get_control_command(throttle_error, dt)
+
+    print("time:" + str(current_time) + " | trajectory len: " + str(len(xt_points)))
 
     if throttle > 0.0:
         throttle_command = throttle
